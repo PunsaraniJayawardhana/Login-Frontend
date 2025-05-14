@@ -34,7 +34,6 @@ function Login() {
             <label htmlFor="email" className="form-label">Email</label>
             <input
               type="email"
-              id="email"
               className="form-control"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -47,7 +46,6 @@ function Login() {
             <label htmlFor="password" className="form-label">Password</label>
             <input
               type="password"
-              id="password"
               className="form-control"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
