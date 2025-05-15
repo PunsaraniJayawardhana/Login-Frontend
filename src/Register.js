@@ -8,8 +8,39 @@ function Register() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
+  const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+  };
+
+  const validatePassword = (password) => {
+    // At least 12 characters, one uppercase, one special character (@, #, $, &)
+    const re = /^(?=.*[A-Z])(?=.*[@#$&]).{12,}$/;
+    return re.test(password);
+  };
+
   const handleRegister = async (e) => {
     e.preventDefault();
+
+    // Check for empty fields
+    if (!username || !email || !password) {
+      alert('Please fill in all fields.');
+      return;
+    }
+
+    // Email validation
+    if (!validateEmail(email)) {
+      alert('Please enter a valid email address.');
+      return;
+    }
+
+    // Password validation
+    if (!validatePassword(password)) {
+      alert('Password must be at least 12 characters long, contain at least one uppercase letter and one special character (@, #, $, &).');
+      return;
+    }
+
+    // Submit registration
     try {
       const res = await axios.post('http://localhost:5000/api/auth/register', {
         username,
@@ -19,7 +50,7 @@ function Register() {
       alert(res.data.message);
       navigate('/login');
     } catch (err) {
-      alert(err.response.data.error);
+      alert(err.response?.data?.error || 'Registration failed.');
     }
   };
 
@@ -32,25 +63,27 @@ function Register() {
             <label htmlFor="username" className="form-label">Username</label>
             <input
               type="text"
+              data-testid="username"
               id="username"
               className="form-control"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Enter your username"
-              required
+              
             />
           </div>
 
           <div className="mb-3">
             <label htmlFor="email" className="form-label">Email</label>
             <input
-              type="email"
+              type="text"
               id="email"
+              data-testid="email"
               className="form-control"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
-              required
+              
             />
           </div>
 
@@ -59,11 +92,12 @@ function Register() {
             <input
               type="password"
               id="password"
+              data-testid="password"
               className="form-control"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
-              required
+              
             />
           </div>
 
